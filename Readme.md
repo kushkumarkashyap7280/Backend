@@ -38,26 +38,23 @@ Welcome to a clean and scalable **backend architecture** built with real **indus
 ## 📁 Folder Structure
 
 ```bash
+```bash
 backend/
-│
-├── config/          # DB connection & global configs
-│   └── db.js
-│
-├── controllers/     # Route logic / controllers
-│
-├── middleware/      # Middlewares (auth, errorHandler, etc.)
-│
-├── models/          # Mongoose schemas
-│
-├── routes/          # All express routes
-│
-├── utils/           # Utility functions (e.g., email, tokens)
-│
-├── uploads/         # Uploaded files via multer
-│
-├── .env             # Environment variables
-├── server.js        # App entry point
-└── package.json
+├── package.json            # Project dependencies
+├── package-lock.json       # Dependency lockfile
+├── Readme.md               # Project documentation
+├── public/                 # Static files or temporary uploads
+│   └── temp/
+└── src/                    # All core backend code lives here
+    ├── app.js              # Express app configuration
+    ├── index.js            # Server entry point
+    ├── constants.js        # Reusable constants
+    ├── controllers/        # Request handlers / route logic
+    ├── db/                 # MongoDB connection setup
+    ├── middlewares/        # Auth, error handling, etc.
+    ├── models/             # Mongoose models (User, Post, etc.)
+    ├── routes/             # Route definitions
+    └── utils/              # Helper functions (e.g., token gen, validators)
 ```
 
 ---
@@ -78,15 +75,6 @@ backend/
 - Default directory: `/uploads`
 
 ---
-
-## 🌐 Sample API Endpoints
-
-```http
-POST   /api/auth/register      # Register a new user
-POST   /api/auth/login         # Login with JWT + Cookie
-GET    /api/user/me            # Get logged-in user data
-POST   /api/upload/image       # Upload file using multer
-```
 
 ---
 
@@ -111,7 +99,7 @@ CLIENT_URL=http://localhost:3000
 
 ```bash
 # Step 1: Clone the project
-git clone https://github.com/your-username/pro-backend-boilerplate.git
+git clone https://github.com/kushkumarkashyap7280/Backend.git
 
 # Step 2: Navigate into the project
 cd pro-backend-boilerplate
@@ -145,35 +133,8 @@ npm run dev
 ## 📬 Author Info
 
 **Created by [Kush Kumar](https://callofcoders.in)**  
-📧 Email: your.email@example.com  
+📧 Email: kushkumar.officialsoftwaredev@gmail.com
 📺 YouTube: [Call of Coders](https://youtube.com/@callofcoders)
 
 ---
-
-## 🤝 Contributing
-
-Feel free to fork this project, create a new branch, and submit a PR!
-
----
-
-## 📃 License
-
-This project is licensed under the [MIT License](./LICENSE).
-
----
-
-## ⭐️ Show some love!
-
-If this helped you, **star the repo** and share it with others who want to learn **backend like a pro**.  
-Together, let’s level up! 🚀
-
----
-
-Let me know if you want:
-- Badges (npm, node version, license, etc.)
-- A logo/banner
-- A sample Postman collection  
-- This file added directly to your GitHub repo via a PR
-
-Just say the word 💻🔥
 

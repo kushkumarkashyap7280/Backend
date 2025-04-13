@@ -192,25 +192,12 @@ Use tools like **Postman**, **Thunder Client**, or **Insomnia** to test all rout
 
 ---
 
-## 🧾 .env Example
-
-```env
-PORT=5000
-MONGO_URI=mongodb://localhost:27017/backendProject
-JWT_SECRET=yourSuperSecretJWT
-CLIENT_URL=http://localhost:3000
-```
-
----
-
 ## 📦 Installation & Setup
 
 ```bash
 # Step 1: Clone the project
 git clone https://github.com/kushkumarkashyap7280/Backend.git
 
-# Step 2: Navigate into the project
-cd pro-backend-boilerplate
 
 # Step 3: Install dependencies
 npm install

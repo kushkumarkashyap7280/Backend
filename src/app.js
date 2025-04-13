@@ -5,10 +5,12 @@ import cookieParser from "cookie-parser";
 const app = express();
 
 app.use(
-  cors({
-    origin: process.env.FRONTEND_URL, // or your frontend domain
-    credentials: true, // to allow cookies to be sent
-  })
+  cors(
+  //   {
+  //   origin: process.env.FRONTEND_URL, // or your frontend domain
+  //   credentials: true, // to allow cookies to be sent
+  // }
+)
 );
 
 // 2. Parse cookies from incoming requests

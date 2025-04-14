@@ -1,6 +1,7 @@
 import express from "express";
-import { registeruser } from "../controllers/user.controller.js";
+import { registeruser , loginuser , logoutuser} from "../controllers/user.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
+import { verifyJwtAcesssToken } from "../middlewares/auth.middleware.js";
 
 const userRouter = express.Router();
 
@@ -12,5 +13,8 @@ userRouter.post(
   ]),
   registeruser
 );
+
+userRouter.post("/login", loginuser);
+userRouter.get("/logout", verifyJwtAcesssToken, logoutuser);
 
 export default userRouter;

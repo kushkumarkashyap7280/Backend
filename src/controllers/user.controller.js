@@ -3,6 +3,8 @@ import User from "../models/user.model.js";
 import apiError from "../utils/apiError.js";
 import apiResponse from "../utils/apiResponse.js";
 import { uploadtocloudinary } from "../utils/cloudinary.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 // function which send userdata but without password and refreshtoken
 const senduserdata = (user) => {
@@ -194,4 +196,61 @@ const logoutuser = asyncHandler(async (req, res) => {
     );
 });
 
-export { registeruser, loginuser, logoutuser };
+const refreshaccesstoken = asyncHandler(async (req, res) => {
+  const { refreshToken } = req.cookies || req.body;
+
+  if (!refreshToken) {
+    throw new apiError(401, "unauthorised access");
+  }
+
+  try {
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+
+    const user = await User.findById(decoded?._id);
+
+    if (!user) {
+      throw new apiError(401, "invalid refresh token");
+    }
+
+    if (refreshToken !== user?.refreshtoken) {
+      throw new apiError(401, "Refresh token is expired or invalid");
+    }
+
+    const generatedtoken = await generateAccessAndRefreshTokens(user);
+
+    // send the access token and refresh token in the response
+    return res
+      .status(200)
+      .cookie("accessToken", generatedtoken.accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        maxAge: 60 * 60 * 1000, // 1 hour
+      })
+      .cookie("refreshToken", generatedtoken.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      })
+      .json(
+        new apiResponse(
+          200,
+          {
+            accessToken: generatedtoken.accessToken,
+            refreshToken: generatedtoken.refreshToken,
+          },
+          "Access token refreshed"
+        )
+      );
+  } catch (error) {
+    throw new apiError(401, error.message || "invalid refresh  token");
+  }
+
+  // const verifyrefreshtoken = await bcrypt.compare(
+  //   user.refreshtoken,
+  //   process.env.REFRESH_TOKEN_SECRET
+  // );
+});
+
+export { registeruser, loginuser, logoutuser ,refreshaccesstoken };

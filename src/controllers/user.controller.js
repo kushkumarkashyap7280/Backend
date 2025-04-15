@@ -246,11 +246,60 @@ const refreshaccesstoken = asyncHandler(async (req, res) => {
   } catch (error) {
     throw new apiError(401, error.message || "invalid refresh  token");
   }
-
-  // const verifyrefreshtoken = await bcrypt.compare(
-  //   user.refreshtoken,
-  //   process.env.REFRESH_TOKEN_SECRET
-  // );
 });
 
-export { registeruser, loginuser, logoutuser ,refreshaccesstoken };
+const changecurrentpassword = asyncHandler(async (req, res) => {
+  const { currentpassword, updatepassword } = req.body;
+
+  try {
+    if (!currentpassword || !updatepassword) {
+      throw new apiError(400, "password is must");
+    }
+
+    const user = await User.findById(req.user?._id);
+
+    if (!user) {
+      throw new apiError(404, "User not found");
+    }
+
+    const correctpassword = await user.ispasswordcorrect(currentpassword);
+
+    if (!correctpassword) {
+      throw new apiError(400, "password is invalid");
+    }
+
+    user.password = updatepassword;
+    await user.save({ validateBeforeSave: false });
+
+    return res
+      .status(200)
+      .json(
+        new apiResponse(
+          200,
+          {
+            password_updated : true
+          },
+          "password updated successfully"
+        )
+      );
+  } catch (error) {
+    throw new apiError(500, "error occured during upadate of password");
+  }
+});
+
+
+const getcurrentuser = asyncHandler(async(req, res)=>{
+  return res
+  .status(200)
+  .json(
+    new apiResponse(
+      200,
+      req.user
+     ,
+      "User data recived from backend"
+    )
+  );
+
+});
+
+export { registeruser, loginuser, logoutuser, refreshaccesstoken , changecurrentpassword ,getcurrentuser};
